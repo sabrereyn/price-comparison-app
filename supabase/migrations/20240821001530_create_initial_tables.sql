@@ -85,6 +85,9 @@ CREATE TABLE item_tag(
 	tag_id UUID REFERENCES tag
 );
 
+ALTER TABLE item_tag
+	ENABLE ROW LEVEL SECURITY;
+
 CREATE POLICY "Users can see tags associated with an item."
 ON item_tag FOR SELECT
 USING(
