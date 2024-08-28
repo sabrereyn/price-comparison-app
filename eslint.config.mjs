@@ -6,18 +6,18 @@ import { FlatCompat } from "@eslint/eslintrc";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
+	baseDirectory: __dirname,
+	recommendedConfig: js.configs.recommended,
+	allConfig: js.configs.all,
 });
 
 export default [
-  ...compat.extends("next/core-web-vitals"),
-  {
-    files: ["/src/**/*.js", "/_components/**/*.jsx"],
-    rules: {
-      "react/jsx-uses-react": "off",
-      "react/react-in-jsx-scope": "off",
-    },
-  },
+	...compat.extends("next/core-web-vitals"),
+	{
+		files: ["/src/**/*.ts", "/_components/**/*.tsx"],
+		rules: {
+			"react/jsx-uses-react": "off",
+			"react/react-in-jsx-scope": "off",
+		},
+	},
 ];

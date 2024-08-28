@@ -1,14 +1,14 @@
+import moment from "moment";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { db } from "../../_utils/dexie/db.model";
+import Input from "../components/Input";
 import Modal from "../modal/Modal";
-import ModalHeader from "../modal/ModalHeader";
 import ModalContent from "../modal/ModalContent";
 import ModalFooter from "../modal/ModalFooter";
-import Input from "../components/Input";
-import { useState } from "react";
-import moment from "moment";
-import { db } from "../../_utils/dexie/db.model";
+import ModalHeader from "../modal/ModalHeader";
 
-export default function EntryForm({ name = "", id = null, productId, close }) {
+export function EntryForm({ name = "", id = null, productId, close }) {
 	const [date, setDate] = useState(moment().format("YYYY[-]MM[-]DD"));
 	const {
 		register,
