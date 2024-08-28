@@ -49,7 +49,6 @@ USING ((SELECT auth.uid()) = user_id);
 
 CREATE TABLE item (
 	item_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-	user_id UUID REFERENCES auth.users,
 	folder_id UUID REFERENCES folder ON DELETE CASCADE,
 	item_name VARCHAR(255) NOT NULL,
 	item_note TEXT DEFAULT '',
@@ -62,22 +61,50 @@ ALTER TABLE item
 
 CREATE POLICY "Users can see their own items."
 ON item FOR SELECT
-USING ((SELECT auth.uid()) = user_id);
+USING(
+	EXISTS(
+		SELECT 1
+		FROM folder
+		WHERE folder.folder_id = item.folder_id
+			AND folder.user_id = (SELECT auth.uid())
+	)
+);
 
 CREATE POLICY "Users can create an item."
 ON item FOR INSERT
 TO authenticated
-WITH CHECK ((SELECT auth.uid()) = user_id);
+WITH CHECK (
+	EXISTS(
+		SELECT 1
+		FROM folder
+		WHERE folder.folder_id = item.folder_id
+			AND folder.user_id = (SELECT auth.uid())
+	)
+);
 
 CREATE POLICY "Users can update their own items."
 ON item FOR UPDATE
 TO authenticated
-USING ((SELECT auth.uid()) = user_id);
+USING (
+	EXISTS(
+		SELECT 1
+		FROM folder
+		WHERE folder.folder_id = item.folder_id
+			AND folder.user_id = (SELECT auth.uid())
+	)
+);
 
 CREATE POLICY "Users can delete an item."
 ON item FOR DELETE
 TO authenticated
-USING ((SELECT auth.uid()) = user_id);
+USING (
+	EXISTS(
+		SELECT 1
+		FROM folder
+		WHERE folder.folder_id = item.folder_id
+			AND folder.user_id = (SELECT auth.uid())
+	)
+);
 
 CREATE TABLE item_tag(
 	item_tag_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -93,9 +120,9 @@ ON item_tag FOR SELECT
 USING(
 	EXISTS(
 		SELECT 1
-		FROM item
+		FROM folder JOIN item ON folder.folder_id=item.item_id
 		WHERE item.item_id = item_tag.item_id
-			AND item.user_id = (SELECT auth.uid())
+			AND folder.user_id = (SELECT auth.uid())
 	)
 );
 
@@ -104,19 +131,19 @@ ON item_tag FOR INSERT
 WITH CHECK(
 	EXISTS(
 		SELECT 1
-		FROM item
+		FROM folder JOIN item ON folder.folder_id=item.item_id
 		WHERE item.item_id = item_tag.item_id
-			AND item.user_id = (SELECT auth.uid())
+			AND folder.user_id = (SELECT auth.uid())
 	)
 );
 
 CREATE POLICY "Users can delete an item."
 ON item_tag FOR DELETE
-USING (
-	EXISTS (
+USING(
+	EXISTS(
 		SELECT 1
-		FROM item
+		FROM folder JOIN item ON folder.folder_id=item.item_id
 		WHERE item.item_id = item_tag.item_id
-			AND item.user_id = (SELECT auth.uid())
+			AND folder.user_id = (SELECT auth.uid())
 	)
 );

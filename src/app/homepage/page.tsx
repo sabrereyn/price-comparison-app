@@ -1,21 +1,28 @@
 "use client";
 import Popup from "reactjs-popup";
 import styles from "../page.module.css";
-import ItemForm from "../../_components/forms/ItemForm";
-import ItemList from "../../_components/lists/ItemList";
-import { useState } from "react";
+import Folderform from "./components/FolderForm";
+import { FolderList } from "./components/FolderList";
+import { Suspense, useState } from "react";
 import Button from "../../_components/components/Button";
 
-export default function ItemHomepage() {
+export default function Homepage() {
 	const [openForm, setOpenForm] = useState(false);
-	const [id, setId] = useState(null);
+	const [id, setId] = useState<string | null>(null);
 
 	return (
 		<main className={styles.main}>
-			<ItemList
-				setOpenForm={setOpenForm}
-				setId={setId}
-			/>
+			<Suspense
+				fallback={
+					<div>
+						<p>Loading...</p>
+					</div>
+				}>
+				<FolderList
+					setOpenForm={setOpenForm}
+					setId={setId}
+				/>
+			</Suspense>
 			<Button
 				label='Add Item'
 				onClick={() => setOpenForm(true)}
@@ -25,7 +32,7 @@ export default function ItemHomepage() {
 				onClose={() => setOpenForm(false)}
 				closeOnDocumentClick={false}
 				modal>
-				<ItemForm
+				<Folderform
 					close={() => setOpenForm(false)}
 					id={id}
 				/>

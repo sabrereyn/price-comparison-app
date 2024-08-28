@@ -1,15 +1,15 @@
 import { useForm } from "react-hook-form";
-import ModalContent from "../modal/ModalContent";
-import ModalFooter from "../modal/ModalFooter";
-import Modal from "../modal/Modal";
-import { db } from "../../_utils/dexie/db.model";
-import ModalHeader from "../modal/ModalHeader";
-import Input from "../components/Input";
-import TextAreaInput from "../components/TextAreaInput";
+import ModalContent from "../../../_components/modal/ModalContent";
+import ModalFooter from "../../../_components/modal/ModalFooter";
+import Modal from "../../../_components/modal/Modal";
+import { db } from "../../../_utils/dexie/db.model";
+import ModalHeader from "../../../_components/modal/ModalHeader";
+import Input from "../../../_components/components/Input";
+import TextAreaInput from "../../../_components/components/TextAreaInput";
 import { useEffect } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 
-export default function ItemForm({ id, close }) {
+export default function Folderform({ id, close }) {
 	const data = id ? useLiveQuery(() => db.product.get(id)) : {};
 	const {
 		reset,

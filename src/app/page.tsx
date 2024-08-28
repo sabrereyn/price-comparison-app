@@ -10,7 +10,7 @@ export default function Page() {
 				inserted prices for user given items. This app will keep track and show historical prices through
 				various charts. Click the button below to be taken to your list of items.
 			</p>
-			<Link href={"/tracking"}>
+			<Link href={"/homepage"}>
 				<button>Get Started Here</button>
 			</Link>
 		</main>
